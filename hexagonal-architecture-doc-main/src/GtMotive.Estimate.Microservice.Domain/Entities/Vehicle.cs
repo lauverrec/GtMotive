@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace GtMotive.Estimate.Microservice.Domain.Entities
 {
@@ -14,13 +14,8 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         /// <param name="model">Vehicle model.</param>
         /// <param name="manufacturingDate">Manufacturing date's vehicle.</param>
         /// <exception cref="ArgumentException">Exception when manufacturing date is older than 5 years.</exception>
-        public Vehicle(string brand, string model, DateTime manufacturingDate)
+        public Vehicle(string brand, string model, int manufacturingDate)
         {
-            if ((manufacturingDate - DateTime.Now).TotalDays / 365 > 5)
-            {
-                throw new ArgumentException("The manufacturing date can't be older that 5 years");
-            }
-
             Id = Guid.NewGuid();
             Brand = brand;
             Model = model;
@@ -29,34 +24,34 @@ namespace GtMotive.Estimate.Microservice.Domain.Entities
         }
 
         /// <summary>
-        /// Gets vehicle Id.
+        /// Gets or sets vehicle Id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets vehicle brand.
+        /// Gets or sets vehicle brand.
         /// </summary>
-        public string Brand { get; private set; }
+        public string Brand { get; set; }
 
         /// <summary>
-        /// Gets vehicle model.
+        /// Gets or sets vehicle model.
         /// </summary>
-        public string Model { get; private set; }
+        public string Model { get; set; }
 
         /// <summary>
-        /// Gets manufacturing date.
+        /// Gets or sets manufacturing date.
         /// </summary>
-        public DateTime ManufacturingDate { get; private set; }
+        public int ManufacturingDate { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether gets if the vehicle is avaibled.
+        /// Gets or sets a value indicating whether gets if the vehicle is avaibled.
         /// </summary>
-        public bool Avaible { get; private set; }
+        public bool Avaible { get; set; }
 
         /// <summary>
-        /// Gets client Id.
+        /// Gets or sets client Id.
         /// </summary>
-        public Guid? ClientId { get; private set; }
+        public Guid? ClientId { get; set; }
 
         /// <summary>
         /// Rent Vehicle.

@@ -1,12 +1,12 @@
-using GtMotive.Estimate.Microservice.Domain.Entities;
+﻿using GtMotive.Estimate.Microservice.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Interfaces
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Repository
 {
     /// <summary>
-    /// Vehicle repository.
+    /// Vehicle repository interface.
     /// </summary>
     public interface IVehicleRepository
     {
