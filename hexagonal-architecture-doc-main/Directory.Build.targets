@@ -4,7 +4,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <EntityFrameworkVersion>5.0.11</EntityFrameworkVersion>
+        <EntityFrameworkVersion>6.0.20</EntityFrameworkVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +22,7 @@
         <PackageReference Update="Microsoft.Extensions.PlatformAbstractions" Version="6.0.0" />
         <PackageReference Update="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
         <PackageReference Update="Microsoft.Extensions.Caching.Redis" Version="6.0.0" />
-        <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
         <PackageReference Update="Microsoft.Extensions.Configuration" Version="6.0.0" />
         <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
         <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />

@@ -3,7 +3,6 @@ using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using GtMotive.Estimate.Microservice.Api;
 using GtMotive.Estimate.Microservice.Api.Mappers;
-using GtMotive.Estimate.Microservice.ApplicationCore.Services;
 using GtMotive.Estimate.Microservice.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -52,8 +51,6 @@ namespace GtMotive.Estimate.Microservice.InfrastructureTests.Infrastructure
 
             services.AddControllers(ApiConfiguration.ConfigureControllers)
                 .WithApiControllers();
-
-            services.AddScoped<IVehicleService, VehicleService>();
 
             services.AddBaseInfrastructure(true);
         }
