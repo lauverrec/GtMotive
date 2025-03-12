@@ -1,3 +1,0 @@
-[*.{cs,vb}]
-
-dotnet_diagnostic.SA1516.severity = none
