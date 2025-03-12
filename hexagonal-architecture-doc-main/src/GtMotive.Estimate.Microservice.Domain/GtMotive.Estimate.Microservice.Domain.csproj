@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+      <RuleTargetType>Full</RuleTargetType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Extensions.Options" Version="9.0.3" />
+    <PackageReference Update="SonarAnalyzer.CSharp" Version="10.7.0.110445">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
