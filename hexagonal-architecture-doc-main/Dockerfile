@@ -33,4 +33,7 @@ RUN dotnet publish "GtMotive.Estimate.Microservice.Host.csproj" -c Release -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "GtMotive.Estimate.Microservice.Host.dll"]
+
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]

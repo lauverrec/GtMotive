@@ -1,16 +1,32 @@
 version: '3.8'
 
 services:
-  microservice:
-    build: .
-    ports:
-      - "80:80"
-    depends_on:
-      - db
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
-      ACCEPT_EULA: "Y"
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Passw0rd
     ports:
       - "1433:1433"
+    networks:
+      - microservices-network
+
+  microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: microservice
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=RentingServiceDB;User Id=sa;Password=YourStrong!Passw0rd;MultipleActiveResultSets=True;
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
