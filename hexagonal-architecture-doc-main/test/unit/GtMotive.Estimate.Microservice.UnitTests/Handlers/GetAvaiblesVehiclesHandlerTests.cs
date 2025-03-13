@@ -18,9 +18,9 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Handlers
             // Arrange
             var mockRepo = new Mock<IVehicleRepository>();
             var availableVehicles = new List<Vehicle>
-        {
-            new("Toyota", "Corolla", 2020)
-        };
+            {
+                new("Toyota", "Corolla", 2020)
+            };
 
             mockRepo.Setup(repo => repo.GetAvaiblesVehiclesAsync()).ReturnsAsync(availableVehicles);
             var handler = new GetAvaiblesVehiclesHandler(mockRepo.Object);
