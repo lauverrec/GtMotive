@@ -5,22 +5,19 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
 using GtMotive.Estimate.Microservice.Domain.Entities;
-using Microsoft.AspNetCore.Mvc.Testing;
+using GtMotive.Estimate.Microservice.Tests;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
 namespace GtMotive.Estimate.Microservice.FunctionalTests
 {
-    public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
+    public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
-        public IntegrationTest(WebApplicationFactory<Program> factory)
+        public IntegrationTest(CustomWebApplicationFactory<Program> factory)
         {
-            if (factory != null)
-            {
-                _client = factory.CreateClient();
-            }
+            _client = factory?.CreateClient();
         }
 
         [Fact]
