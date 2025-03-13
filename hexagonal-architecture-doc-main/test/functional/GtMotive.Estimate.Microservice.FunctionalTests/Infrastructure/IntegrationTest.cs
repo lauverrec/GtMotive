@@ -5,7 +5,6 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
 using GtMotive.Estimate.Microservice.Domain.Entities;
-using GtMotive.Estimate.Microservice.Tests;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 
