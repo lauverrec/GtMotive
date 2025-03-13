@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GtMotive.Estimate.Microservice.Api.Dtos;
+using GtMotive.Estimate.Microservice.ApplicationCore.Interfaces.Dtos;
 using GtMotive.Estimate.Microservice.Domain.Entities;
 
 namespace GtMotive.Estimate.Microservice.Api.Mappers
@@ -8,7 +8,7 @@ namespace GtMotive.Estimate.Microservice.Api.Mappers
     {
         public VehicleProfile()
         {
-            CreateMap<VehicleDto, Vehicle>();
+            CreateMap<Vehicle, VehicleDto>();
         }
     }
 }

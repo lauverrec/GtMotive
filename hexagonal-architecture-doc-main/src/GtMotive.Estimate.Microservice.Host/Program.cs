@@ -5,6 +5,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using GtMotive.Estimate.Microservice.Api;
+using GtMotive.Estimate.Microservice.Api.Filters;
 using GtMotive.Estimate.Microservice.Api.Mappers;
 using GtMotive.Estimate.Microservice.ApplicationCore.Repository;
 using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers;
@@ -109,6 +110,14 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddAutoMapper(typeof(VehicleProfile));
+
+builder.Services.AddScoped<BusinessExceptionFilter>();
+
+builder.Services.AddControllers(options =>
+{
+    // Puedes agregarlo de forma global
+    options.Filters.Add<BusinessExceptionFilter>();
+});
 
 var app = builder.Build();
 
