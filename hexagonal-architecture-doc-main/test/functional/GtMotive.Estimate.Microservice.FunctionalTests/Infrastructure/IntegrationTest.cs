@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.ApplicationCore.Command;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
 using GtMotive.Estimate.Microservice.Domain.Entities;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;

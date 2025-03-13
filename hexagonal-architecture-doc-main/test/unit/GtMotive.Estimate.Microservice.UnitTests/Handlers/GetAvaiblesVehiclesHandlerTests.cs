@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.ApplicationCore.Handlers;
-using GtMotive.Estimate.Microservice.ApplicationCore.Queries;
 using GtMotive.Estimate.Microservice.ApplicationCore.Repository;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Queries;
 using GtMotive.Estimate.Microservice.Domain.Entities;
 using Moq;
 using Xunit;

@@ -5,8 +5,9 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using GtMotive.Estimate.Microservice.Api;
-using GtMotive.Estimate.Microservice.ApplicationCore.Handlers;
+using GtMotive.Estimate.Microservice.Api.Mappers;
 using GtMotive.Estimate.Microservice.ApplicationCore.Repository;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers;
 using GtMotive.Estimate.Microservice.Host.Configuration;
 using GtMotive.Estimate.Microservice.Host.DependencyInjection;
 using GtMotive.Estimate.Microservice.Infrastructure;
@@ -107,6 +108,7 @@ builder.Services.AddMediatR(typeof(GetAvaiblesVehiclesHandler).Assembly);
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+builder.Services.AddAutoMapper(typeof(VehicleProfile));
 
 var app = builder.Build();
 

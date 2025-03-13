@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.ApplicationCore.Command;
 using GtMotive.Estimate.Microservice.ApplicationCore.Repository;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
 using MediatR;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Handlers
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers
 {
     /// <summary>
     /// Return vehicle handler.

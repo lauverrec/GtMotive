@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Command
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command
 {
     /// <summary>
     /// Rent vehicle command.

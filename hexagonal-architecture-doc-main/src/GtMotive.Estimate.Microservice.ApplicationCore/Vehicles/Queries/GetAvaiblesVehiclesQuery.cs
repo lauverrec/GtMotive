@@ -2,7 +2,7 @@
 using GtMotive.Estimate.Microservice.Domain.Entities;
 using MediatR;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Queries
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Queries
 {
     /// <summary>
     /// Get avaibles vehicles query.

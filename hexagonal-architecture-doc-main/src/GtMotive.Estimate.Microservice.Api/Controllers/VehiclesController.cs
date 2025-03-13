@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.ApplicationCore.Command;
-using GtMotive.Estimate.Microservice.ApplicationCore.Queries;
+using AutoMapper;
+using GtMotive.Estimate.Microservice.Api.Dtos;
+using GtMotive.Estimate.Microservice.Api.Filters;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Queries;
 using GtMotive.Estimate.Microservice.Domain.Entities;
 using GtMotive.Estimate.Microservice.Domain.Interfaces;
 using MediatR;
@@ -11,15 +16,18 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
 {
     [ApiController]
     [Route("api/vehicles")]
+    [ServiceFilter(typeof(BusinessExceptionFilter))]
     public class VehiclesController : ControllerBase
     {
         private readonly IAppLogger<Vehicle> _logger;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public VehiclesController(IAppLogger<Vehicle> logger, IMediator mediator)
+        public VehiclesController(IAppLogger<Vehicle> logger, IMediator mediator, IMapper mapper)
         {
             _logger = logger;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -27,8 +35,9 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
         {
             try
             {
-                var vehicleId = await _mediator.Send(command);
-                return Ok(vehicleId);
+                var vehicle = await _mediator.Send(command);
+                _logger.LogInformation($"Vehicle with id {vehicle.Id} has created sucessfully.");
+                return Ok(_mapper.Map<VehicleDto>(vehicle));
             }
             catch (InvalidOperationException ex)
             {
@@ -39,14 +48,23 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
         [HttpGet("available")]
         public async Task<IActionResult> GetAvaibleVehicles()
         {
-            _logger.LogInformation("Get avaible Vehicles");
             var vehicles = await _mediator.Send(new GetAvaiblesVehiclesQuery());
-            return Ok(vehicles);
+
+            _logger.LogInformation($"There are {vehicles.Count()} vehicles avaibles.");
+
+            return Ok(_mapper.Map<List<VehicleDto>>(vehicles));
         }
 
         [HttpPost("rent")]
         public async Task<IActionResult> RentVehicle([FromBody] RentVehicleCommand command)
         {
+            if (command == null)
+            {
+                throw new InvalidOperationException("Command is null");
+            }
+
+            _logger.LogInformation($"Rent vehicle with id {command.VehicleId}");
+
             var result = await _mediator.Send(command);
 
             return !result
@@ -57,7 +75,15 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
         [HttpPost("return")]
         public async Task<IActionResult> ReturnVehicle([FromBody] ReturnVehicleCommand command)
         {
+            if (command == null)
+            {
+                throw new InvalidOperationException("Command is null");
+            }
+
+            _logger.LogInformation($"Return vehicle with id {command.VehicleId}");
+
             var result = await _mediator.Send(command);
+
             return !result ? BadRequest("Can't return vehicle") : Ok("Vehicle return sucessfully.");
         }
     }

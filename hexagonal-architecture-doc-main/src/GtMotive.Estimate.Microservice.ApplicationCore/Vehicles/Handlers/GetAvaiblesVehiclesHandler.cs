@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GtMotive.Estimate.Microservice.ApplicationCore.Queries;
 using GtMotive.Estimate.Microservice.ApplicationCore.Repository;
+using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Queries;
 using GtMotive.Estimate.Microservice.Domain.Entities;
 using MediatR;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Handlers
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers
 {
     /// <summary>
     /// Get avaibles vehicles handler.

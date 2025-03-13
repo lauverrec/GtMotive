@@ -1,12 +1,12 @@
-﻿using System;
+﻿using GtMotive.Estimate.Microservice.Domain.Entities;
 using MediatR;
 
-namespace GtMotive.Estimate.Microservice.ApplicationCore.Command
+namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command
 {
     /// <summary>
     /// Create vehicle command.
     /// </summary>
-    public class CreateVehicleCommand : IRequest<Guid>
+    public class CreateVehicleCommand : IRequest<Vehicle>
     {
         /// <summary>
         /// Gets or sets vehicle brand.

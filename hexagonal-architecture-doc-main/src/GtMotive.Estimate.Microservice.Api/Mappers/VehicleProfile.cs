@@ -9,7 +9,6 @@ namespace GtMotive.Estimate.Microservice.Api.Mappers
         public VehicleProfile()
         {
             CreateMap<VehicleDto, Vehicle>();
-            CreateMap<Vehicle, VehicleDto>();
         }
     }
 }
