@@ -29,125 +29,152 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-var builder = WebApplication.CreateBuilder();
-
-// Configuration.
-if (!builder.Environment.IsDevelopment())
+namespace GtMotive.Estimate.Microservice // Aquí defines el namespace deseado.
 {
-    builder.Configuration.AddJsonFile("serilogsettings.json", optional: false, reloadOnChange: true);
-
-    var secretClient = new SecretClient(
-        new Uri($"https://{builder.Configuration.GetValue<string>("KeyVaultName")}.vault.azure.net/"),
-        new DefaultAzureCredential());
-
-    builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-}
-
-// Logging configuration for host bootstrapping.
-builder.Logging.ClearProviders();
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-    .CreateBootstrapLogger();
-
-builder.Host.UseSerilog();
-
-// Add services to the container.
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
-    builder.Services.AddApplicationInsightsKubernetesEnricher();
-}
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var appSettingsSection = builder.Configuration.GetSection("AppSettings");
-builder.Services.Configure<AppSettings>(appSettingsSection);
-var appSettings = appSettingsSection.Get<AppSettings>();
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
-
-builder.Services.AddControllers(ApiConfiguration.ConfigureControllers)
-    .WithApiControllers();
-
-builder.Services.AddBaseInfrastructure(builder.Environment.IsDevelopment());
-
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
-                               ForwardedHeaders.XForwardedProto;
-
-    // Only loopback proxies are allowed by default.
-    // Clear that restriction because forwarders are enabled by explicit
-    // configuration.
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
-
-JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-builder.Services.AddAuthentication(options =>
+#pragma warning disable CA1052 // Los tipos de contenedor estáticos deben ser Static o NotInheritable
+    public class Program
+#pragma warning restore CA1052 // Los tipos de contenedor estáticos deben ser Static o NotInheritable
     {
-        options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-    })
-    .AddIdentityServerAuthentication(options =>
-    {
-        options.Authority = appSettings.JwtAuthority;
-        options.ApiName = "estimate-api";
-        options.SupportedTokens = SupportedTokens.Jwt;
-    });
+        protected Program()
+        {
+        }
 
-builder.Services.AddSwagger(appSettings, builder.Configuration);
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Configuración.
+            if (!builder.Environment.IsDevelopment())
+            {
+                builder.Configuration.AddJsonFile("serilogsettings.json", optional: false, reloadOnChange: true);
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-builder.Services.AddMediatR(typeof(GetAvaiblesVehiclesHandler).Assembly);
+                var secretClient = new SecretClient(
+                    new Uri($"https://{builder.Configuration.GetValue<string>("KeyVaultName")}.vault.azure.net/"),
+                    new DefaultAzureCredential());
 
-builder.Services.AddControllers();
+                builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
+            }
 
-builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddAutoMapper(typeof(VehicleProfile));
+            // Configuración de logging para el arranque del host.
+            builder.Logging.ClearProviders();
 
-builder.Services.AddScoped<BusinessExceptionFilter>();
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+                .CreateBootstrapLogger();
 
-builder.Services.AddControllers(options =>
-{
-    // Puedes agregarlo de forma global
-    options.Filters.Add<BusinessExceptionFilter>();
-});
+            builder.Host.UseSerilog();
 
-var app = builder.Build();
+            // Agregar servicios al contenedor.
+            if (!builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
+                builder.Services.AddApplicationInsightsKubernetesEnricher();
+            }
 
-// Logging configuration.
-Log.Logger = builder.Environment.IsDevelopment() ?
-    new LoggerConfiguration()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
-        .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-        .MinimumLevel.Override("System", LogEventLevel.Warning)
-        .WriteTo.Console(
-            outputTemplate:
-            "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
-            theme: AnsiConsoleTheme.Literate)
-        .CreateLogger() :
-    new LoggerConfiguration()
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", "addoperation")
-        .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
-        .WriteTo.ApplicationInsights(
-            app.Services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces)
-        .ReadFrom.Configuration(builder.Configuration)
-        .CreateLogger();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
-var pathBase = new PathBase(builder.Configuration.GetValue("PathBase", defaultValue: PathBase.DefaultPathBase));
+            var appSettingsSection = builder.Configuration.GetSection("AppSettings");
+            builder.Services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
 
-if (!pathBase.IsDefault)
-{
-    app.UsePathBase(pathBase.CurrentWithoutTrailingSlash);
+            builder.Services.AddControllers(ApiConfiguration.ConfigureControllers)
+                .WithApiControllers();
+
+            builder.Services.AddBaseInfrastructure(builder.Environment.IsDevelopment());
+
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                                           ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = appSettings.JwtAuthority;
+                    options.ApiName = "estimate-api";
+                    options.SupportedTokens = SupportedTokens.Jwt;
+                });
+
+            builder.Services.AddSwagger(appSettings, builder.Configuration);
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+            builder.Services.AddMediatR(typeof(GetAvaiblesVehiclesHandler).Assembly);
+
+            builder.Services.AddControllers();
+
+            builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+            builder.Services.AddAutoMapper(typeof(VehicleProfile));
+
+            builder.Services.AddScoped<BusinessExceptionFilter>();
+
+            builder.Services.AddControllers(options =>
+            {
+                // Puedes agregar el filtro de forma global.
+                options.Filters.Add<BusinessExceptionFilter>();
+            });
+
+            var app = builder.Build();
+
+            // Configuración de logging.
+            Log.Logger = builder.Environment.IsDevelopment() ?
+                new LoggerConfiguration()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+                    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+                    .MinimumLevel.Override("System", LogEventLevel.Warning)
+                    .WriteTo.Console(
+                        outputTemplate:
+                        "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}",
+                        theme: AnsiConsoleTheme.Literate)
+                    .CreateLogger() :
+                new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .Enrich.WithProperty("Application", "addoperation")
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}")
+                    .WriteTo.ApplicationInsights(
+                        app.Services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces)
+                    .ReadFrom.Configuration(builder.Configuration)
+                    .CreateLogger();
+
+            var pathBase = new PathBase(builder.Configuration.GetValue("PathBase", defaultValue: PathBase.DefaultPathBase));
+
+            if (!pathBase.IsDefault)
+            {
+                app.UsePathBase(pathBase.CurrentWithoutTrailingSlash);
+            }
+
+            app.UseForwardedHeaders();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseSwaggerInApplication(pathBase, builder.Configuration);
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
 }
+<<<<<<< Updated upstream
 
 app.UseForwardedHeaders();
 
@@ -174,3 +201,5 @@ public partial class Program
 #pragma warning restore S1118 // Utility classes should not have public constructors
 {
 }
+=======
+>>>>>>> Stashed changes
