@@ -164,6 +164,12 @@ namespace GtMotive.Estimate.Microservice.Host// Aquí defines el namespace desea
                 app.UseDeveloperExceptionPage();
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                dbContext.Database.Migrate();
+            }
+
             app.UseSwaggerInApplication(pathBase, builder.Configuration);
             app.UseRouting();
             app.UseAuthentication();
