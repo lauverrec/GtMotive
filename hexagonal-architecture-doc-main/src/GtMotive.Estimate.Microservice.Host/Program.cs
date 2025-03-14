@@ -29,7 +29,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-namespace GtMotive.Estimate.Microservice // Aquí defines el namespace deseado.
+namespace GtMotive.Estimate.Microservice.Host// Aquí defines el namespace deseado.
 {
 #pragma warning disable CA1052 // Los tipos de contenedor estáticos deben ser Static o NotInheritable
     public class Program

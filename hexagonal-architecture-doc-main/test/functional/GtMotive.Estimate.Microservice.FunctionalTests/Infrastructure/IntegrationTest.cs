@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
+using GtMotive.Estimate.Microservice.Domain.Entities;
+using GtMotive.Estimate.Microservice.Host;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace GtMotive.Estimate.Microservice.FunctionalTests
 {
-    public class IntegrationTest : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
-        public IntegrationTest(CustomWebApplicationFactory<Program> factory)
+        public IntegrationTest(WebApplicationFactory<Program> factory)
         {
             _client = factory?.CreateClient();
         }
@@ -31,7 +35,15 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests
             var createResponse = await _client.PostAsJsonAsync("api/vehicles", createCommand);
             createResponse.EnsureSuccessStatusCode();
 
-            Assert.NotNull(createResponse);
+            // List of avaible vehicles
+            var listResponse = await _client.GetAsync(new Uri("api/vehicles/available", UriKind.Relative));
+            listResponse.EnsureSuccessStatusCode();
+
+            // Read response
+            var vehicles = await listResponse.Content.ReadFromJsonAsync<IEnumerable<Vehicle>>();
+
+            Assert.NotNull(vehicles);
+            Assert.Contains(vehicles, v => v.Brand == "Audi" && v.Model == "A3");
         }
     }
 }
