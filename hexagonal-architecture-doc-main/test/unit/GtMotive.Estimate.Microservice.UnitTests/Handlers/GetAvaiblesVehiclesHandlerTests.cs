@@ -15,7 +15,6 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Handlers
         [Fact]
         public async Task HandleReturnsAvailableVehicles()
         {
-            // Arrange
             var mockRepo = new Mock<IVehicleRepository>();
             var availableVehicles = new List<Vehicle>
             {
@@ -25,10 +24,8 @@ namespace GtMotive.Estimate.Microservice.UnitTests.Handlers
             mockRepo.Setup(repo => repo.GetAvaiblesVehiclesAsync()).ReturnsAsync(availableVehicles);
             var handler = new GetAvaiblesVehiclesHandler(mockRepo.Object);
 
-            // Act
             var result = await handler.Handle(new GetAvaiblesVehiclesQuery(), CancellationToken.None);
 
-            // Assert
             Assert.Single(result);
         }
     }

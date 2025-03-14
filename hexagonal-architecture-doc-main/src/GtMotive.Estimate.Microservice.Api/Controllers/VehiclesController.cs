@@ -84,7 +84,7 @@ namespace GtMotive.Estimate.Microservice.Api.Controllers
 
             var result = await _mediator.Send(command);
 
-            return !result ? BadRequest("Can't return vehicle") : Ok("Vehicle return sucessfully.");
+            return !result ? BadRequest("Can't return vehicle. Verify if it isn't rented or if the client hadn't rented a vehicle yet.") : Ok("Vehicle return sucessfully.");
         }
     }
 }

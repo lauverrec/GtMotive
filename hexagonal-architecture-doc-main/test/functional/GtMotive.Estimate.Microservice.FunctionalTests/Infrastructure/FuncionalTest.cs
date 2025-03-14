@@ -11,11 +11,11 @@ using Xunit;
 
 namespace GtMotive.Estimate.Microservice.FunctionalTests
 {
-    public class IntegrationTest : IClassFixture<WebApplicationFactory<Program>>
+    public class FuncionalTest : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
 
-        public IntegrationTest(WebApplicationFactory<Program> factory)
+        public FuncionalTest(WebApplicationFactory<Program> factory)
         {
             _client = factory?.CreateClient();
         }
@@ -23,7 +23,7 @@ namespace GtMotive.Estimate.Microservice.FunctionalTests
         [Fact]
         public async Task CreateVehicleThenListAvailableVehicles()
         {
-            // 1. Crear un vehículo
+            // Create vehicle
             var createCommand = new CreateVehicleCommand
             {
                 Brand = "Audi",

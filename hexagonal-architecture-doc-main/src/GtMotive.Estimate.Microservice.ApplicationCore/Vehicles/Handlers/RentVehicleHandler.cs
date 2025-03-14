@@ -44,6 +44,7 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers
                 return false;
             }
 
+            // Check if client had already rented a vehicle
             var vehicleRented = (await _vehicleRepository.GetAllAsync())
                 .Where(v => !v.Avaible && v.ClientId == request.ClientId);
 

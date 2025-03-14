@@ -38,11 +38,13 @@ namespace GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Handlers
                 throw new InvalidOperationException("Request is null");
             }
 
+            // The manufacturing date can't be older that 5 year
             if (DateTime.Now.Year - request.ManufacturingDate > 5)
             {
                 throw new BusinessException("The manufacturing date vehicle can't be older that 5 years");
             }
 
+            // Create vehicle
             var vehicle = new Vehicle(request.Brand, request.Model, request.ManufacturingDate);
 
             await _vehicleRepository.AddAsync(vehicle);
