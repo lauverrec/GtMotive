@@ -174,32 +174,3 @@ namespace GtMotive.Estimate.Microservice // Aquí defines el namespace deseado.
         }
     }
 }
-<<<<<<< Updated upstream
-
-app.UseForwardedHeaders();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
-app.UseSwaggerInApplication(pathBase, builder.Configuration);
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-
-app.Run();
-
-// Agrega la clase parcial para que puedas referenciar Program en los tests.
-#pragma warning disable S1118 // Utility classes should not have public constructors
-#pragma warning disable S3903 // Types should be defined in named namespaces
-#pragma warning disable CA1050 // Declare types in namespaces
-public partial class Program
-#pragma warning restore CA1050 // Declare types in namespaces
-#pragma warning restore S3903 // Types should be defined in named namespaces
-#pragma warning restore S1118 // Utility classes should not have public constructors
-{
-}
-=======
->>>>>>> Stashed changes
