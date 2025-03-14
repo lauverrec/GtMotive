@@ -3,12 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using GtMotive.Estimate.Microservice.ApplicationCore.Vehicles.Command;
-<<<<<<< Updated upstream
-using GtMotive.Estimate.Microservice.Domain.Entities;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
-=======
-using GtMotive.Estimate.Microservice.Tests;
->>>>>>> Stashed changes
 using Xunit;
 
 namespace GtMotive.Estimate.Microservice.FunctionalTests
